@@ -1,4 +1,5 @@
 import InvoiceModel from "../model/invoice.model";
+import Joi from "joi"
 
 const invoices = [
     { id: 1, item: "Google X1", qte: 4, date: new Date() },
@@ -10,25 +11,32 @@ export default {
 
 
     findAll(req, res) {
-        res.json(invoices)
+        InvoiceModel.find().then(invoices=>{
+            res.json(invoices).catch(error=>{
+                res.status(500).json(error)
+            })
+        })
     },
 
     create(req,res){
         const {item,qte,date,due,rate,tax}=req.body;
-        if(!item){
-            return res.status(400).json({err:"item property is required"})
-        }
-        if(!date){
-            return res.status(400).json({err:"date property is required"})
-        }
-        if(!qte){
-            return res.status(400).json({err:"qte property is required"})
-        }
-        if(!due){
-            return res.status(400).json({err:"due property is required"})
+        const schema=Joi.object().keys({
+            item:Joi.string().required(),
+            qte:Joi.number().required(),
+            date:Joi.date().required(),
+            due:Joi.date().required(),
+            rate:Joi.number().optional(),
+            tax:Joi.number().optional(),
+        })
+
+        const {error,value}=schema.validate(req.body);
+
+        if(error){
+           return  res.status(400).json(error)
         }
 
-        InvoiceModel.create({item,qte,date,due,rate,tax}).then(invoice=>{
+
+        InvoiceModel.create(value).then(invoice=>{
             res.status(200).json({invoice})
         }).catch(error=>{
             res.status(500).json({msg:error})
