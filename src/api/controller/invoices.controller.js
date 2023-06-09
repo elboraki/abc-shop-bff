@@ -1,6 +1,6 @@
+import {StatusCodes} from "http-status-codes"
 import InvoiceModel from "../model/invoice.model";
 import Joi from "joi"
-
 const invoices = [
     { id: 1, item: "Google X1", qte: 4, date: new Date() },
     { id: 2, item: "Amazon Lambda", qte: 3, date: new Date() },
@@ -13,7 +13,7 @@ export default {
     findAll(req, res) {
         InvoiceModel.find().then(invoices=>{
             res.json(invoices).catch(error=>{
-                res.status(500).json(error)
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
             })
         })
     },
@@ -32,14 +32,14 @@ export default {
         const {error,value}=schema.validate(req.body);
 
         if(error){
-           return  res.status(400).json(error)
+           return  res.status(StatusCodes.BAD_REQUEST).json(error)
         }
 
 
         InvoiceModel.create(value).then(invoice=>{
-            res.status(200).json({invoice})
+            res.status(StatusCodes.OK).json({invoice})
         }).catch(error=>{
-            res.status(500).json({msg:error})
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:error})
         })
     }
 }
