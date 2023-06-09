@@ -1,11 +1,7 @@
 import { StatusCodes } from "http-status-codes"
 import InvoiceModel from "../model/invoice.model";
 import Joi from "joi"
-const invoices = [
-    { id: 1, item: "Google X1", qte: 4, date: new Date() },
-    { id: 2, item: "Amazon Lambda", qte: 3, date: new Date() },
-    { id: 9, item: "Microsoft E1", qte: 8, date: new Date() }
-];
+
 export default {
 
 
@@ -42,28 +38,52 @@ export default {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error })
         })
     },
-    findOne(req,res){
-        let {id} = req.params
-        InvoiceModel.findById(id).then(invoice=>{
-            if(!invoice){
-                return res.status(StatusCodes.NOT_FOUND).json({msg:"Invoice not found"})
+    findOne(req, res) {
+        let { id } = req.params
+        InvoiceModel.findById(id).then(invoice => {
+            if (!invoice) {
+                return res.status(StatusCodes.NOT_FOUND).json({ msg: "Invoice not found" })
             }
             return res.json(invoice)
-        }).catch(error=>{
+        }).catch(error => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
         })
 
     },
-    delete(req,res){
-        let {id} = req.params
-        InvoiceModel.findByIdAndRemove(id).then(invoice=>{
-            if(!invoice){
-                return res.status(StatusCodes.NOT_FOUND).json({msg:"Invoice not found"})
+    delete(req, res) {
+        let { id } = req.params
+        InvoiceModel.findByIdAndRemove(id).then(invoice => {
+            if (!invoice) {
+                return res.status(StatusCodes.NOT_FOUND).json({ msg: "Invoice not found" })
             }
             return res.json(invoice)
-        }).catch(error=>{
+        }).catch(error => {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
         })
 
+    },
+    update(req,res){
+        let {id}=req.params
+        const schema = Joi.object().keys({
+            item: Joi.string().optional(),
+            qte: Joi.number().optional(),
+            date: Joi.date().optional(),
+            due: Joi.date().optional(),
+            rate: Joi.number().optional(),
+            tax: Joi.number().optional(),
+        })
+
+        const { error, value } = schema.validate(req.body);
+
+        if (error) {
+            return res.status(StatusCodes.BAD_REQUEST).json(error)
+        }
+
+
+        InvoiceModel.findByIdAndUpdate({"_id":id},value).then(invoice => {
+            res.status(StatusCodes.OK).json({ invoice })
+        }).catch(error => {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: error })
+        })
     }
 }
