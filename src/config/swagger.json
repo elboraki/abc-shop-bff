@@ -1,0 +1,93 @@
+{
+    "title": "Invoice Builder ",
+    "description": "ABC shop BFF.",
+    "host":"http://localhost:3000",
+    "basePath": "/api-doc",
+    "openapi": "3.0.0",
+    "tags":[
+        {
+            "name":"Invoices API",
+            "description":"ABC shop BFF. API"
+        }
+    ],
+    "schemes":["http"],
+    "consumes":["application/json"],
+    "produces":["application/json"],
+    "paths":{
+        "/invoices":{
+            "get":{
+                "tags":["Invoices"],
+                "description":"get all list of invoices",
+                "responses":{
+                    "200":{
+
+                    }
+                }
+            },
+            "post":{
+                "tags":["Invoices"],
+                "description":"create an invoice",
+                "responses":{
+                    "200":{
+
+                    }
+                }
+            },
+            "put":{
+                "tags":["Invoices"],
+                "description":"update an invoice",
+                "responses":{
+                    "200":{
+
+                    }
+                }
+            },
+            "delete":{
+                "tags":["Invoices"],
+                "description":"delete an invoice",
+                "responses":{
+                    "200":{
+
+                    }
+                }
+            }
+        }
+    },
+    "definitions":{
+        "Invoice":{
+            "required":["item","qte","date","due"],
+            "properties":{
+                "id":{
+                    "type":"string",
+                    "uniqueItems":true
+                },
+                "item":{
+                    "type":"string"
+                },
+                "qte":{
+                    "type":"number",
+                    "format":"int32"
+                },
+                "date":{
+                    "type":"number",
+                    "format":"date"
+                },
+                "due":{
+                    "type":"number",
+                    "format":"date"
+                },
+                "rate":{
+                    "type":"number",
+                    "format":"float"
+                },
+                "tax":{
+                    "type":"number",
+                    "format":"float"
+                }
+
+            }
+        }
+    }
+
+
+  }

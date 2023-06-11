@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(logger('combined'))
 
-app.use("/api-doc",swaggerUi.save,swaggerUi.setup(swaggerDocument,{
+app.use("/api-doc",swaggerUi.serve,swaggerUi.setup(swaggerDocument,{
     explorer:true
 }))
 app.use("/api",router)
