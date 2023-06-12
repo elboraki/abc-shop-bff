@@ -18,4 +18,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = exports.router = _express2.default.Router();
 router.get("/invoices", _invoices2.default.findAll);
 router.post("/invoices", _invoices2.default.create);
+router.get("/invoices/:id", _invoices2.default.findOne);
+router.delete("/invoices/:id", _invoices2.default.delete);
+router.put("/invoices/:id", _invoices2.default.update);
 //# sourceMappingURL=routes.js.map
